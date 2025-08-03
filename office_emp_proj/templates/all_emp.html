@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Employee Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  </head>
+  <body>
+  
+
+      <h2>Employee Details! </h2>
+      <hr>
+      <p>Here you can view all the employee details. You can also add, update, or delete employee records.</p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Salary</th>
+            <th scope="col">Bonus</th>
+            <th scope="col">Phone No.</th>
+            <th scope="col">Department</th>
+            <th scope="col">location</th>
+            <th scope="col">Hiredate</th>
+
+
+          </tr>
+        </thead>
+        <tbody>
+          {% for emp in emps %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ emp.first_name }}</td>
+            <td>{{ emp.last_name }}</td>
+            <td>{{ emp.salary }}</td>
+            <td>{{ emp.bonus }}</td>
+            <td>{{ emp.phone }}</td>
+            <td>{{ emp.dept }}</td>
+            <td>{{ emp.dept.location }}</td>
+            <td>{{ emp.hire_date }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+
+
+
+
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+  </body>
+</html>
