@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Employee
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -100,5 +100,19 @@ def filter_emp(request):
 
 
 
-def update_emp(request):
-    return render(request,"update_emp.html")
+def update_emp(request, emp_id):
+    employee = get_object_or_404(Employee, id=emp_id)
+    if request.method == 'POST':
+        employee.name = request.POST.get('name')
+        employee.email = request.POST.get('email')
+        employee.department = request.POST.get('department')
+        employee.save()
+        return redirect('all_emp')  # Redirect to the employee list after update
+    return render(request, "update_emp.html", {'employee': employee})
+
+def update_emp_list(request):
+    emps = Employee.objects.all()
+    context = {
+        'emps': emps
+    }
+    return render(request, "update_emp_list.html", context)
