@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Employee
+from .models import Employee, Department, Role
 from django.http import HttpResponse
 from django.shortcuts import redirect
 
 
 
 # Create your views here.
+# Force reload 2
 def index(request):
     return render(request,"index.html")
 
@@ -40,27 +41,19 @@ def add_emp(request):
             hire_date=hire_date
         )
         emp.save()
-        return render(request, "add_emp.html", {'message': 'Employee added successfully!'})
-        # Optionally, you can redirect to another page or render a success message
-        # For example, you can return a success message or redirect to the all_emp view
-        # return HttpResponse("Employee added successfully!")
-        # or
-        # return render(request, "add_emp.html", {'message': 'Employee added successfully!'})
-        # Uncomment the following line if you want to redirect to the all_emp view
-        # If you want to redirect to another page after adding an employee
-        # return redirect('all_emp')
+        return render(request, "add_emp.html", {'message': 'Employee added successfully!', 'depts': Department.objects.all(), 'roles': Role.objects.all()})
     
     elif request.method == 'GET':
-        return render(request, "add_emp.html")
+        return render(request, "add_emp.html", {'depts': Department.objects.all(), 'roles': Role.objects.all()})
     else:
-        return render(request,"add_emp.html")
+        return render(request,"add_emp.html", {'depts': Department.objects.all(), 'roles': Role.objects.all()})
 
 def remove_emp(request, emp_id= 0):   
         if emp_id:
             try:
                 emp = Employee.objects.get(id=emp_id)
                 emp.delete()
-                return HttpResponse("Employee Removed Successfully")
+                return redirect('all_emp')  # Redirect to employee list after deletion
             except Employee.DoesNotExist:
                 return HttpResponse('Employee not found.')
 
@@ -103,12 +96,17 @@ def filter_emp(request):
 def update_emp(request, emp_id):
     employee = get_object_or_404(Employee, id=emp_id)
     if request.method == 'POST':
-        employee.name = request.POST.get('name')
-        employee.email = request.POST.get('email')
-        employee.department = request.POST.get('department')
+        employee.first_name = request.POST.get('first_name')
+        employee.last_name = request.POST.get('last_name')
+        employee.dept_id = request.POST.get('dept')
+        employee.salary = request.POST.get('salary')
+        employee.bonus = request.POST.get('bonus')
+        employee.role_id = request.POST.get('role')
+        employee.phone = request.POST.get('phone')
+        employee.hire_date = request.POST.get('hire_date')
         employee.save()
         return redirect('all_emp')  # Redirect to the employee list after update
-    return render(request, "update_emp.html", {'employee': employee})
+    return render(request, "update_emp.html", {'employee': employee, 'depts': Department.objects.all(), 'roles': Role.objects.all()})
 
 def update_emp_list(request):
     emps = Employee.objects.all()

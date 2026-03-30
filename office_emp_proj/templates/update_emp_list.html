@@ -1,19 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Select Employee to Update</title>
-</head>
-<body>
-    <h2>Select Employee to Update</h2>
-    <ul>
-        {% for emp in emps %}
-            <li>
-                {{ emp.first_name }} {{ emp.last_name }} -
-                <a href="{% url 'update_emp' emp.id %}">Update</a>
-            </li>
-        {% empty %}
-            <li>No employees found.</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Select Employee to Update - Employee Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2><i class="fas fa-user-edit"></i> Select Employee to Update</h2>
+      <a href="{% url 'add_emp' %}" class="btn btn-success"><i class="fas fa-plus"></i> Add New Employee</a>
+    </div>
+    
+    {% if emps %}
+    <div class="row">
+      {% for emp in emps %}
+      <div class="col-md-4 mb-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ emp.first_name }} {{ emp.last_name }}</h5>
+            <p class="card-text">
+              <strong>Department:</strong> {{ emp.dept.name }}<br>
+              <strong>Role:</strong> {{ emp.role.name }}<br>
+              <strong>Salary:</strong> ${{ emp.salary|floatformat:2 }}<br>
+              <strong>Phone:</strong> {{ emp.phone }}
+            </p>
+            <a href="{% url 'update_emp' emp.id %}" class="btn btn-warning"><i class="fas fa-edit"></i> Update</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+      <i class="fas fa-info-circle"></i> No employees found. <a href="{% url 'add_emp' %}" class="alert-link">Add the first employee</a>.
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

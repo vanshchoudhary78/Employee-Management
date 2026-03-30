@@ -1,20 +1,85 @@
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Select Employee to Update</title>
-</head>
-<body>
-    <h2>Select Employee to Update</h2>
-    <ul>
-        {% for emp in emps %}
-            <li>
-                {{ emp.first_name }} {{ emp.last_name }} -
-                <a href="{% url 'update_emp' emp.id %}">Update</a>
-            </li>
-        {% empty %}
-            <li>No employees found.</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% block title %}Update Employee - Employee Management System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header bg-warning text-dark">
+        <h3 class="card-title mb-0"><i class="fas fa-user-edit"></i> Update Employee: {{ employee.first_name }} {{ employee.last_name }}</h3>
+      </div>
+      <div class="card-body">
+        <form method="post" action="{% url 'update_emp' employee.id %}">
+          {% csrf_token %}
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="first_name" class="form-label">First Name *</label>
+              <input type="text" class="form-control" id="first_name" name="first_name" value="{{ employee.first_name }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="last_name" class="form-label">Last Name *</label>
+              <input type="text" class="form-control" id="last_name" name="last_name" value="{{ employee.last_name }}" required>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="dept" class="form-label">Department *</label>
+              <select class="form-select" id="dept" name="dept" required>
+                <option value="">Select Department</option>
+                {% for dept in depts %}
+                <option value="{{ dept.id }}" {% if dept.id == employee.dept.id %}selected{% endif %}>{{ dept.name }} ({{ dept.location }})</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="role" class="form-label">Role *</label>
+              <select class="form-select" id="role" name="role" required>
+                <option value="">Select Role</option>
+                {% for role in roles %}
+                <option value="{{ role.id }}" {% if role.id == employee.role.id %}selected{% endif %}>{{ role.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="salary" class="form-label">Salary *</label>
+              <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input type="number" class="form-control" id="salary" name="salary" value="{{ employee.salary }}" min="0" step="0.01" required>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="bonus" class="form-label">Bonus</label>
+              <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input type="number" class="form-control" id="bonus" name="bonus" value="{{ employee.bonus }}" min="0" step="0.01">
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="phone" class="form-label">Phone Number *</label>
+              <input type="tel" class="form-control" id="phone" name="phone" value="{{ employee.phone }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="hire_date" class="form-label">Hire Date *</label>
+              <input type="date" class="form-control" id="hire_date" name="hire_date" value="{{ employee.hire_date|date:'Y-m-d' }}" required>
+            </div>
+          </div>
+          
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="{% url 'all_emp' %}" class="btn btn-secondary me-md-2">Cancel</a>
+            <button type="submit" class="btn btn-warning"><i class="fas fa-save"></i> Update Employee</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
